@@ -1,14 +1,15 @@
 'use strict';
-//добавить проверку на повтор, добавить диапозон генерации
-var getRandom = function (maxNumber) {
-  return Math.floor(Math.random() * maxNumber);
-};
-var getRandomUrl = function (maxNumber) {
-  return 'photos/' + getRandom(maxNumber) + '.jpg';
+
+var getRandomInt = function (min, max) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-var getRandomLike = function (maxNumber) {
-  return getRandom(maxNumber);
+var getRandomUrl = function (min, max) {
+  return 'photos/' + getRandomInt(min, max) + '.jpg';
+};
+
+var getRandomLike = function (min, max) {
+  return getRandomInt(min, max);
 };
 var getRandomComment = function () {
   var commentsList = [
@@ -19,7 +20,7 @@ var getRandomComment = function () {
     'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
-  var random = Math.floor(Math.random() * commentsList.length)
+  var random = Math.floor(Math.random() * commentsList.length);
   var commentsArray = [];
   for (var i = 0; i < random; i++) {
     commentsArray[i] = commentsList[random];
@@ -30,7 +31,7 @@ var getRandomComment = function () {
 var photos = [];
 var generatePhotosArray = function (count) {
   for (var i = 0; i < count; i++) {
-    photos[i] = {url: getRandomUrl(25), likes: getRandomLike(200), comments: getRandomComment().length};
+    photos[i] = {url: getRandomUrl(1, 25), likes: getRandomLike(15, 200), comments: getRandomComment()};
   }
   return photos;
 };
@@ -42,7 +43,7 @@ var renderPicturesElement = function (i) {
 
   picturesElement.querySelector('img').setAttribute('src', photos[i].url);
   picturesElement.querySelector('.picture-likes').textContent = photos[i].likes;
-  picturesElement.querySelector('.picture-comments').textContent = photos[i].comments;
+  picturesElement.querySelector('.picture-comments').textContent = photos[i].comments.length;
 
   return picturesElement;
 };
@@ -50,7 +51,7 @@ var renderPicturesElement = function (i) {
 var fragment = document.createDocumentFragment();
 for (var i = 0; i < photos.length; i++) {
   fragment.appendChild(renderPicturesElement(i));
-};
+}
 
 var picturesBlock = document.querySelector('.pictures');
 picturesBlock.appendChild(fragment);
@@ -62,4 +63,4 @@ var galleryOverlayElement = document.querySelector('.gallery-overlay');
 galleryOverlayElement.classList.remove('hidden');
 galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', photos[1].url);
 galleryOverlayElement.querySelector('.likes-count').textContent = photos[1].likes;
-galleryOverlayElement.querySelector('.comments-count').textContent = photos[1].comments;
+galleryOverlayElement.querySelector('.comments-count').textContent = photos[1].comments.length;
