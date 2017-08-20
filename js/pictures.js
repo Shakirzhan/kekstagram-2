@@ -23,7 +23,7 @@ var getRandomComment = function () {
   var random = Math.floor(Math.random() * commentsList.length);
   var commentsArray = [];
   for (var i = 0; i < random; i++) {
-    commentsArray[i] = commentsList[random];
+    commentsArray[i] = commentsList[Math.floor(Math.random() * commentsList.length)];
   }
   return commentsArray;
 };
