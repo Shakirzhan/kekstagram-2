@@ -6,34 +6,21 @@ var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-
-var test = [];
-var getRandomUrlArray = function (min, max, arr) {
-  for (var i = 0; i < max; i++) {
-    var url = 'photos/' + getRandomInt(min, max) + '.jpg';
+var getRandomUrl = function (min, max, arr) {
+  var url = 'photos/' + getRandomInt(min, max) + '.jpg';
+  if (arr.indexOf(url) === -1) {
     arr[arr.length] = url;
+  } else {
+    getRandomUrl(min, max, arr);
+  }
+};
 
-    // if (arr.indexOf(url) === -1) {
-    //   arr[arr.length] = url;
-    // } else {
-    //   getRandomUrlArray(min, max, arr);
-    // }
+var getUrlArray = function (min, max, arr) {
+  for (var i = 0; i < max; i++) {
+    getRandomUrl(min, max, arr);
   }
   return arr;
 };
-getRandomUrlArray(1, 5, test);
-console.log(test);
-
-// var getRandomUrl = function (min, max, arr) {
-//   var url = 'photos/' + getRandomInt(min, max) + '.jpg';
-//   if (arr.indexOf(url) === -1) {
-//     arr[arr.length] = url;
-//     console.log('сгенерировал ' + url);
-//   } else {
-//     getRandomUrl(min, max, arr);
-//   }
-//   return url;
-// };
 
 var getRandomLike = function (min, max) {
   return getRandomInt(min, max);
@@ -57,9 +44,8 @@ var getRandomComment = function () {
 
 var photos = [];
 var generatePhotosArray = function (count) {
-
   var randomUrlArray = [];
-  getRandomUrlArray(1, 25, randomUrlArray);
+  getUrlArray(1, 25, randomUrlArray);
 
   for (var i = 0; i < count; i++) {
     photos[i] = {
