@@ -1,12 +1,39 @@
 'use strict';
-
+var getRandom = function (maxNumber) {
+  return Math.floor(Math.random() * maxNumber);
+};
 var getRandomInt = function (min, max) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 };
 
-var getRandomUrl = function (min, max) {
-  return 'photos/' + getRandomInt(min, max) + '.jpg';
+
+var test = [];
+var getRandomUrlArray = function (min, max, arr) {
+  for (var i = 0; i < max; i++) {
+    var url = 'photos/' + getRandomInt(min, max) + '.jpg';
+    arr[arr.length] = url;
+
+    // if (arr.indexOf(url) === -1) {
+    //   arr[arr.length] = url;
+    // } else {
+    //   getRandomUrlArray(min, max, arr);
+    // }
+  }
+  return arr;
 };
+getRandomUrlArray(1, 5, test);
+console.log(test);
+
+// var getRandomUrl = function (min, max, arr) {
+//   var url = 'photos/' + getRandomInt(min, max) + '.jpg';
+//   if (arr.indexOf(url) === -1) {
+//     arr[arr.length] = url;
+//     console.log('сгенерировал ' + url);
+//   } else {
+//     getRandomUrl(min, max, arr);
+//   }
+//   return url;
+// };
 
 var getRandomLike = function (min, max) {
   return getRandomInt(min, max);
@@ -20,18 +47,25 @@ var getRandomComment = function () {
     'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
     'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!'
   ];
-  var random = Math.floor(Math.random() * commentsList.length);
+  var random = getRandom(commentsList.length);
   var commentsArray = [];
   for (var i = 0; i < random; i++) {
-    commentsArray[i] = commentsList[Math.floor(Math.random() * commentsList.length)];
+    commentsArray[i] = commentsList[getRandom(commentsList.length)];
   }
   return commentsArray;
 };
 
 var photos = [];
 var generatePhotosArray = function (count) {
+
+  var randomUrlArray = [];
+  getRandomUrlArray(1, 25, randomUrlArray);
+
   for (var i = 0; i < count; i++) {
-    photos[i] = {url: getRandomUrl(1, 25), likes: getRandomLike(15, 200), comments: getRandomComment()};
+    photos[i] = {
+      url: randomUrlArray[i],
+      likes: getRandomLike(15, 200),
+      comments: getRandomComment()};
   }
   return photos;
 };
