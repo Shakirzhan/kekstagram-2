@@ -69,9 +69,12 @@ var renderPicturesElement = function (i) {
 };
 
 var fragment = document.createDocumentFragment();
-for (var i = 0; i < photos.length; i++) {
-  fragment.appendChild(renderPicturesElement(i));
-}
+var renderFragment = function (array) {
+  for (var i = 0; i < array.length; i++) {
+    fragment.appendChild(renderPicturesElement(i));
+  }
+};
+renderFragment(photos);
 
 var picturesBlock = document.querySelector('.pictures');
 picturesBlock.appendChild(fragment);
@@ -81,6 +84,9 @@ uploadOverlayElement.classList.add('hidden');
 
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
 galleryOverlayElement.classList.remove('hidden');
-galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', photos[1].url);
-galleryOverlayElement.querySelector('.likes-count').textContent = photos[1].likes;
-galleryOverlayElement.querySelector('.comments-count').textContent = photos[1].comments.length;
+var renderOverlayElement = function (array) {
+  galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', array[1].url);
+  galleryOverlayElement.querySelector('.likes-count').textContent = array[1].likes;
+  galleryOverlayElement.querySelector('.comments-count').textContent = array[1].comments.length;
+};
+renderOverlayElement(photos);
