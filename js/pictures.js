@@ -146,8 +146,8 @@ for (var i = 0; i < pictureCollection.length; i++) {
 for (var j = 0; j < pictureCollection.length; j++) {
   pictureCollection[j].addEventListener('keydown', function (event) {
     if (event.keyCode === ENTER_KEYCODE) {
-      onPictureClick();
-      openGallery();
+      console.log(event.currentTarget);
+      onPictureClick(event);
     }
   });
 }
