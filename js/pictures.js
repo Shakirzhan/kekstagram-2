@@ -1,4 +1,6 @@
 'use strict';
+var COUNT_PICTURES = 25;
+
 var getRandom = function (maxNumber) {
   return Math.floor(Math.random() * maxNumber);
 };
@@ -55,15 +57,16 @@ var generatePhotosArray = function (count) {
   }
   return photos;
 };
-generatePhotosArray(25);
+generatePhotosArray(COUNT_PICTURES);
 
 var pictureTemplate = document.querySelector('#picture-template').content;
-var renderPicturesElement = function (i) {
+var renderPicturesElement = function (array, i) {
+
   var picturesElement = pictureTemplate.cloneNode(true);
 
-  picturesElement.querySelector('img').setAttribute('src', photos[i].url);
-  picturesElement.querySelector('.picture-likes').textContent = photos[i].likes;
-  picturesElement.querySelector('.picture-comments').textContent = photos[i].comments.length;
+  picturesElement.querySelector('img').setAttribute('src', array[i].url);
+  picturesElement.querySelector('.picture-likes').textContent = array[i].likes;
+  picturesElement.querySelector('.picture-comments').textContent = array[i].comments.length;
 
   return picturesElement;
 };
@@ -71,7 +74,7 @@ var renderPicturesElement = function (i) {
 var fragment = document.createDocumentFragment();
 var renderFragment = function (array) {
   for (var i = 0; i < array.length; i++) {
-    fragment.appendChild(renderPicturesElement(i));
+    fragment.appendChild(renderPicturesElement(array, i));
   }
 };
 renderFragment(photos);
