@@ -1,5 +1,8 @@
 'use strict';
+
 var COUNT_PICTURES = 25;
+var ESC_KEYCODE = 27;
+var ENTER_KEYCODE = 13;
 
 var getRandom = function (maxNumber) {
   return Math.floor(Math.random() * maxNumber);
@@ -86,10 +89,65 @@ var uploadOverlayElement = document.querySelector('.upload-overlay');
 uploadOverlayElement.classList.add('hidden');
 
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
-galleryOverlayElement.classList.remove('hidden');
+var closeGalleryBtn = document.querySelector('.gallery-overlay-close');
+
+var onEscPress = function (event) {
+  if (event.keyCode === ESC_KEYCODE) {
+    closeGallery();
+  }
+};
+var openGallery = function () {
+  galleryOverlayElement.classList.remove('hidden');
+  document.addEventListener('keydown', onEscPress);
+};
+var closeGallery = function () {
+  galleryOverlayElement.classList.add('hidden');
+  document.removeEventListener('keydown', onEscPress);
+};
+
+closeGalleryBtn.addEventListener('click', function () {
+  closeGallery();
+});
+closeGalleryBtn.addEventListener('keydown', function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    closeGallery();
+  }
+});
+
 var renderOverlayElement = function (array) {
   galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', array.url);
   galleryOverlayElement.querySelector('.likes-count').textContent = array.likes;
   galleryOverlayElement.querySelector('.comments-count').textContent = array.comments.length;
 };
+
+var getPicture = function (element) {
+  galleryOverlayElement.querySelector('.gallery-overlay-image').src = element.querySelector('img').getAttribute('src');
+  galleryOverlayElement.querySelector('.likes-count').textContent = element.querySelector('.picture-comments').textContent;
+  galleryOverlayElement.querySelector('.comments-count').textContent = element.querySelector('.picture-likes').textContent;
+};
+
+var onPictureClick = function (event) {
+  var element = event.currentTarget;
+  getPicture(element);
+  openGallery();
+  return;
+};
+
+var pictureCollection = document.querySelectorAll('.picture');
+
 renderOverlayElement(photos[1]);
+
+openGallery();
+
+for (var i = 0; i < pictureCollection.length; i++) {
+  pictureCollection[i].addEventListener('click', onPictureClick);
+}
+
+for (var j = 0; j < pictureCollection.length; j++) {
+  pictureCollection[j].addEventListener('keydown', function (event) {
+    if (event.keyCode === ENTER_KEYCODE) {
+      onPictureClick();
+      openGallery();
+    }
+  });
+}
