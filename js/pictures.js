@@ -88,8 +88,8 @@ uploadOverlayElement.classList.add('hidden');
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
 galleryOverlayElement.classList.remove('hidden');
 var renderOverlayElement = function (array) {
-  galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', array[1].url);
-  galleryOverlayElement.querySelector('.likes-count').textContent = array[1].likes;
-  galleryOverlayElement.querySelector('.comments-count').textContent = array[1].comments.length;
+  galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', array.url);
+  galleryOverlayElement.querySelector('.likes-count').textContent = array.likes;
+  galleryOverlayElement.querySelector('.comments-count').textContent = array.comments.length;
 };
-renderOverlayElement(photos);
+renderOverlayElement(photos[1]);
