@@ -127,8 +127,8 @@ var getPicture = function (element) {
 };
 
 var onPictureClick = function (event) {
-  var element = event.currentTarget;
-  getPicture(element);
+  event.preventDefault();
+  getPicture(event.currentTarget);
   openGallery();
   return;
 };
@@ -146,7 +146,6 @@ for (var i = 0; i < pictureCollection.length; i++) {
 for (var j = 0; j < pictureCollection.length; j++) {
   pictureCollection[j].addEventListener('keydown', function (event) {
     if (event.keyCode === ENTER_KEYCODE) {
-      console.log(event.currentTarget);
       onPictureClick(event);
     }
   });
