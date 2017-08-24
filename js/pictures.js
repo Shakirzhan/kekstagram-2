@@ -126,8 +126,8 @@ var renderOverlayElement = function (array) {
 
 var getPicture = function (element) {
   galleryOverlayElement.querySelector('.gallery-overlay-image').src = element.querySelector('img').getAttribute('src');
-  galleryOverlayElement.querySelector('.comments-count').textContent = element.querySelector('.picture-likes').textContent;
-  galleryOverlayElement.querySelector('.likes-count').textContent = element.querySelector('.picture-comments').textContent;
+  galleryOverlayElement.querySelector('.comments-count').textContent = element.querySelector('.picture-comments').textContent;
+  galleryOverlayElement.querySelector('.likes-count').textContent = element.querySelector('.picture-likes').textContent;
 };
 
 var onPictureClick = function (event) {
