@@ -4,6 +4,10 @@ var COUNT_PICTURES = 25;
 var ESC_KEYCODE = 27;
 var ENTER_KEYCODE = 13;
 
+var toArray = function (collection) {
+  return Array.prototype.slice.call(collection);
+};
+
 var getRandom = function (maxNumber) {
   return Math.floor(Math.random() * maxNumber);
 };
@@ -134,19 +138,19 @@ var onPictureClick = function (event) {
 };
 
 var pictureCollection = document.querySelectorAll('.picture');
+pictureCollection = toArray(pictureCollection);
 
 renderOverlayElement(photos[1]);
 
 openGallery();
 
-for (var i = 0; i < pictureCollection.length; i++) {
-  pictureCollection[i].addEventListener('click', onPictureClick);
-}
-
-for (var j = 0; j < pictureCollection.length; j++) {
-  pictureCollection[j].addEventListener('keydown', function (event) {
+pictureCollection.forEach(function (picture) {
+  picture.addEventListener('click', onPictureClick);
+});
+pictureCollection.forEach(function (picture) {
+  picture.addEventListener('keydown', function (event) {
     if (event.keyCode === ENTER_KEYCODE) {
       onPictureClick(event);
     }
   });
-}
+});
