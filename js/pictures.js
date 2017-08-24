@@ -72,8 +72,8 @@ var renderPicturesElement = function (array, i) {
   var picturesElement = pictureTemplate.cloneNode(true);
 
   picturesElement.querySelector('img').setAttribute('src', array[i].url);
-  picturesElement.querySelector('.picture-likes').textContent = array[i].likes;
   picturesElement.querySelector('.picture-comments').textContent = array[i].comments.length;
+  picturesElement.querySelector('.picture-likes').textContent = array[i].likes;
 
   return picturesElement;
 };
@@ -120,14 +120,14 @@ closeGalleryBtn.addEventListener('keydown', function (event) {
 
 var renderOverlayElement = function (array) {
   galleryOverlayElement.querySelector('.gallery-overlay-image').setAttribute('src', array.url);
-  galleryOverlayElement.querySelector('.likes-count').textContent = array.likes;
   galleryOverlayElement.querySelector('.comments-count').textContent = array.comments.length;
+  galleryOverlayElement.querySelector('.likes-count').textContent = array.likes;
 };
 
 var getPicture = function (element) {
   galleryOverlayElement.querySelector('.gallery-overlay-image').src = element.querySelector('img').getAttribute('src');
-  galleryOverlayElement.querySelector('.likes-count').textContent = element.querySelector('.picture-comments').textContent;
   galleryOverlayElement.querySelector('.comments-count').textContent = element.querySelector('.picture-likes').textContent;
+  galleryOverlayElement.querySelector('.likes-count').textContent = element.querySelector('.picture-comments').textContent;
 };
 
 var onPictureClick = function (event) {
