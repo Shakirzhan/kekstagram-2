@@ -85,9 +85,6 @@ renderFragment(photos);
 var picturesBlock = document.querySelector('.pictures');
 picturesBlock.appendChild(fragment);
 
-var uploadOverlayElement = document.querySelector('.upload-overlay');
-uploadOverlayElement.classList.add('hidden');
-
 var galleryOverlayElement = document.querySelector('.gallery-overlay');
 var closeGalleryBtn = document.querySelector('.gallery-overlay-close');
 
@@ -154,3 +151,35 @@ if (pictureCollection.length > 0) {
     });
   });
 }
+
+// module4-task2
+var uploadForm = document.querySelector('#upload-select-image');
+var uploadFileInput = uploadForm.querySelector('#upload-file');
+var uploadImage = uploadForm.querySelector('.upload-image');
+var uploadOverlay = uploadForm.querySelector('.upload-overlay');
+var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
+var uploadDescription = uploadForm.querySelector('.upload-form-description');
+
+var onUploadOverlayEscPress = function (event) {
+  if (event.keyCode === ESC_KEYCODE && event.target !== uploadDescription) {
+    closeUploadOverlay();
+  }
+};
+var openUploadOverlay = function () {
+  uploadImage.classList.add('hidden');
+  uploadOverlay.classList.remove('hidden');
+  document.addEventListener('keydown', onUploadOverlayEscPress);
+};
+var closeUploadOverlay = function () {
+  uploadOverlay.classList.add('hidden');
+  uploadImage.classList.remove('hidden');
+  document.removeEventListener('keydown', onUploadOverlayEscPress);
+};
+
+uploadFileInput.addEventListener('click', openUploadOverlay);
+uploadCancel.addEventListener('click', closeUploadOverlay);
+uploadCancel.addEventListener('keydown', function (event) {
+  if (event.keyCode === ENTER_KEYCODE) {
+    closeUploadOverlay();
+  }
+});
