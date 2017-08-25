@@ -165,15 +165,29 @@ var onUploadOverlayEscPress = function (event) {
     closeUploadOverlay();
   }
 };
+var validDescriptionInput = function () {
+  if (!uploadDescription.validity.valid) {
+    if (uploadDescription.validity.tooShort) {
+      uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
+    } else if (uploadDescription.validity.tooLong) {
+      uploadDescription.setCustomValidity('не более 100 символов');
+    } else if (uploadDescription.validity.valueMissing) {
+      uploadDescription.setCustomValidity('Обязательное напиште комментарий');
+    }
+  }
+};
 var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
+  uploadDescription.addEventListener('invalid', validDescriptionInput);
 };
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
+  uploadDescription.removeEventListener('invalid', validDescriptionInput);
+
 };
 
 uploadFileInput.addEventListener('click', openUploadOverlay);
