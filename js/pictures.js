@@ -159,6 +159,8 @@ var uploadImage = uploadForm.querySelector('.upload-image');
 var uploadOverlay = uploadForm.querySelector('.upload-overlay');
 var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
 var uploadDescription = uploadForm.querySelector('.upload-form-description');
+var effectControls = uploadForm.querySelector('.upload-effect-controls');
+var effectPreview = uploadForm.querySelector('.effect-image-preview');
 
 var onUploadOverlayEscPress = function (event) {
   if (event.keyCode === ESC_KEYCODE && event.target !== uploadDescription) {
@@ -195,5 +197,23 @@ uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (event) {
   if (event.keyCode === ENTER_KEYCODE) {
     closeUploadOverlay();
+  }
+});
+
+effectControls.addEventListener('click', function (event) {
+  if (event.target.classList.contains('upload-effect-label-chrome') || event.target.id === 'upload-effect-chrome') {
+    effectPreview.classList.add('effect-chrome');
+  }
+  if (event.target.classList.contains('upload-effect-label-sepia') || event.target.id === 'upload-effect-sepia') {
+    effectPreview.classList.add('effect-sepia');
+  }
+  if (event.target.classList.contains('upload-effect-label-marvin') || event.target.id === 'upload-effect-marvin') {
+    effectPreview.classList.add('effect-marvin');
+  }
+  if (event.target.classList.contains('upload-effect-label-phobos') || event.target.id === 'upload-effect-phobos') {
+    effectPreview.classList.add('effect-phobos');
+  }
+  if (event.target.classList.contains('upload-effect-label-heat') || event.target.id === 'upload-effect-heat') {
+    effectPreview.classList.add('effect-heat');
   }
 });
