@@ -201,19 +201,27 @@ uploadCancel.addEventListener('keydown', function (event) {
 });
 
 effectControls.addEventListener('click', function (event) {
+  if (event.target.classList.contains('upload-effect-label') || event.target.id === 'upload-effect-none') {
+    effectPreview.removeAttribute('class');
+  }
   if (event.target.classList.contains('upload-effect-label-chrome') || event.target.id === 'upload-effect-chrome') {
+    effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-chrome');
   }
   if (event.target.classList.contains('upload-effect-label-sepia') || event.target.id === 'upload-effect-sepia') {
+    effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-sepia');
   }
   if (event.target.classList.contains('upload-effect-label-marvin') || event.target.id === 'upload-effect-marvin') {
+    effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-marvin');
   }
   if (event.target.classList.contains('upload-effect-label-phobos') || event.target.id === 'upload-effect-phobos') {
+    effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-phobos');
   }
   if (event.target.classList.contains('upload-effect-label-heat') || event.target.id === 'upload-effect-heat') {
+    effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-heat');
   }
 });
