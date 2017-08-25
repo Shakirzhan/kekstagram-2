@@ -161,6 +161,10 @@ var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
 var uploadDescription = uploadForm.querySelector('.upload-form-description');
 var effectControls = uploadForm.querySelector('.upload-effect-controls');
 var effectPreview = uploadForm.querySelector('.effect-image-preview');
+var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
+var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
+var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
+
 
 var onUploadOverlayEscPress = function (event) {
   if (event.keyCode === ESC_KEYCODE && event.target !== uploadDescription) {
@@ -223,5 +227,19 @@ effectControls.addEventListener('click', function (event) {
   if (event.target.classList.contains('upload-effect-label-heat') || event.target.id === 'upload-effect-heat') {
     effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-heat');
+  }
+});
+
+resizeValue.value = 100 + '%';
+effectPreview.style.transform = 'scale(1)';
+
+resizeDec.addEventListener('click', function (event) {
+  if (parseInt(resizeValue.value, 10) >= 25) {
+    resizeValue.value = (parseInt(resizeValue.value, 10) - 25) + '%';
+  }
+});
+resizeInc.addEventListener('click', function (event) {
+  if (parseInt(resizeValue.value, 10) <= 75) {
+    resizeValue.value = (parseInt(resizeValue.value, 10) + 25) + '%';
   }
 });
