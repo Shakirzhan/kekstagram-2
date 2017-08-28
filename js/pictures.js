@@ -183,7 +183,7 @@ var validDescriptionInput = function () {
     }
   }
 };
-// обработчик кнопки масштаба минус
+// обработчик кнопки масштаба минус и плюс
 var onDecClick = function () {
   var value = parseInt(resizeValue.value, 10);
   var scaleValue = function () {
@@ -208,7 +208,14 @@ var onIncClick = function () {
     effectPreview.style.transform = 'scale(' + scaleValue() + ')';
   }
 };
-
+// обработчик изменения фильтров
+var onEffectControlsClick = function (event) {
+  if (event.target.name === 'effect') {
+    effectPreview.removeAttribute('class');
+    effectPreview.classList.add('effect-image-preview');
+    effectPreview.classList.add(event.target.id.slice(7));
+  }
+};
 // функция открытия формы кадрирования
 var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
@@ -217,6 +224,7 @@ var openUploadOverlay = function () {
   uploadDescription.addEventListener('invalid', validDescriptionInput);
   resizeDec.addEventListener('click', onDecClick);
   resizeInc.addEventListener('click', onIncClick);
+  effectControls.addEventListener('click', onEffectControlsClick);
 };
 // функция закрытия формы кадрирования
 var closeUploadOverlay = function () {
@@ -226,6 +234,7 @@ var closeUploadOverlay = function () {
   uploadDescription.removeEventListener('invalid', validDescriptionInput);
   resizeDec.removeEventListener('click', onDecClick);
   resizeInc.removeEventListener('click', onIncClick);
+  effectControls.removeEventListener('click', onEffectControlsClick);
 };
 
 // события закрытия и открытия формы кадрирования
@@ -235,32 +244,5 @@ uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (event) {
   if (event.keyCode === ENTER_KEYCODE) {
     closeUploadOverlay();
-  }
-});
-
-// изменение фильтров
-effectControls.addEventListener('click', function (event) {
-  if (event.target.classList.contains('upload-effect-label') || event.target.id === 'upload-effect-none') {
-    effectPreview.removeAttribute('class');
-  }
-  if (event.target.classList.contains('upload-effect-label-chrome') || event.target.id === 'upload-effect-chrome') {
-    effectPreview.removeAttribute('class');
-    effectPreview.classList.add('effect-chrome');
-  }
-  if (event.target.classList.contains('upload-effect-label-sepia') || event.target.id === 'upload-effect-sepia') {
-    effectPreview.removeAttribute('class');
-    effectPreview.classList.add('effect-sepia');
-  }
-  if (event.target.classList.contains('upload-effect-label-marvin') || event.target.id === 'upload-effect-marvin') {
-    effectPreview.removeAttribute('class');
-    effectPreview.classList.add('effect-marvin');
-  }
-  if (event.target.classList.contains('upload-effect-label-phobos') || event.target.id === 'upload-effect-phobos') {
-    effectPreview.removeAttribute('class');
-    effectPreview.classList.add('effect-phobos');
-  }
-  if (event.target.classList.contains('upload-effect-label-heat') || event.target.id === 'upload-effect-heat') {
-    effectPreview.removeAttribute('class');
-    effectPreview.classList.add('effect-heat');
   }
 });
