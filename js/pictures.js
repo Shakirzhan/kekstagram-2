@@ -165,12 +165,13 @@ var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
 var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
 var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
 
-
+// обработчик ESC при открытой форме кадрирования
 var onUploadOverlayEscPress = function (event) {
   if (event.keyCode === ESC_KEYCODE && event.target !== uploadDescription) {
     closeUploadOverlay();
   }
 };
+// проверка поля с комментариями
 var validDescriptionInput = function () {
   if (!uploadDescription.validity.valid) {
     if (uploadDescription.validity.tooShort) {
@@ -182,21 +183,53 @@ var validDescriptionInput = function () {
     }
   }
 };
+// обработчик кнопки масштаба минус
+var onDecClick = function () {
+  var value = parseInt(resizeValue.value, 10);
+  var scaleValue = function () {
+    var i = value / 100;
+    return i;
+  };
+  if (value > 25) {
+    value = value - 25;
+    resizeValue.value = value + '%';
+    effectPreview.style.transform = 'scale(' + scaleValue() + ')';
+  }
+};
+var onIncClick = function () {
+  var value = parseInt(resizeValue.value, 10);
+  var scaleValue = function () {
+    var i = value / 100;
+    return i;
+  };
+  if (value <= 75) {
+    value = value + 25;
+    resizeValue.value = value + '%';
+    effectPreview.style.transform = 'scale(' + scaleValue() + ')';
+  }
+};
+
+// функция открытия формы кадрирования
 var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
   uploadDescription.addEventListener('invalid', validDescriptionInput);
+  resizeDec.addEventListener('click', onDecClick);
+  resizeInc.addEventListener('click', onIncClick);
 };
+// функция закрытия формы кадрирования
 var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
   uploadDescription.removeEventListener('invalid', validDescriptionInput);
-
+  resizeDec.removeEventListener('click', onDecClick);
+  resizeInc.removeEventListener('click', onIncClick);
 };
 
-uploadFileInput.addEventListener('click', openUploadOverlay);
+// события закрытия и открытия формы кадрирования
+uploadFileInput.addEventListener('change', openUploadOverlay);
 uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (event) {
   if (event.keyCode === ENTER_KEYCODE) {
@@ -204,6 +237,7 @@ uploadCancel.addEventListener('keydown', function (event) {
   }
 });
 
+// изменение фильтров
 effectControls.addEventListener('click', function (event) {
   if (event.target.classList.contains('upload-effect-label') || event.target.id === 'upload-effect-none') {
     effectPreview.removeAttribute('class');
@@ -227,19 +261,5 @@ effectControls.addEventListener('click', function (event) {
   if (event.target.classList.contains('upload-effect-label-heat') || event.target.id === 'upload-effect-heat') {
     effectPreview.removeAttribute('class');
     effectPreview.classList.add('effect-heat');
-  }
-});
-
-resizeValue.value = 100 + '%';
-effectPreview.style.transform = 'scale(1)';
-
-resizeDec.addEventListener('click', function (event) {
-  if (parseInt(resizeValue.value, 10) >= 25) {
-    resizeValue.value = (parseInt(resizeValue.value, 10) - 25) + '%';
-  }
-});
-resizeInc.addEventListener('click', function (event) {
-  if (parseInt(resizeValue.value, 10) <= 75) {
-    resizeValue.value = (parseInt(resizeValue.value, 10) + 25) + '%';
   }
 });
