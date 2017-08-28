@@ -134,8 +134,6 @@ var pictureCollection = document.querySelectorAll('.picture');
 
 renderOverlayElement(photos[1]);
 
-openGallery();
-
 if (pictureCollection.length > 0) {
   [].forEach.call(pictureCollection, function (picture) {
     picture.addEventListener('click', onPictureClick);
@@ -186,27 +184,17 @@ var validDescriptionInput = function () {
 // обработчик кнопки масштаба минус и плюс
 var onDecClick = function () {
   var value = parseInt(resizeValue.value, 10);
-  var scaleValue = function () {
-    var i = value / 100;
-    return i;
-  };
-  if (value > 25) {
-    value = value - 25;
-    resizeValue.value = value + '%';
-    effectPreview.style.transform = 'scale(' + scaleValue() + ')';
-  }
+  value -= 25;
+  value = (value < 25) ? 25 : value;
+  resizeValue.value = value + '%';
+  effectPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 var onIncClick = function () {
   var value = parseInt(resizeValue.value, 10);
-  var scaleValue = function () {
-    var i = value / 100;
-    return i;
-  };
-  if (value <= 75) {
-    value = value + 25;
-    resizeValue.value = value + '%';
-    effectPreview.style.transform = 'scale(' + scaleValue() + ')';
-  }
+  value += 25;
+  value = (value > 100) ? 100 : value;
+  resizeValue.value = value + '%';
+  effectPreview.style.transform = 'scale(' + (value / 100) + ')';
 };
 // обработчик изменения фильтров
 var onEffectControlsClick = function (event) {
