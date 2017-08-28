@@ -170,7 +170,7 @@ var onUploadOverlayEscPress = function (event) {
   }
 };
 // проверка поля с комментариями
-var validDescriptionInput = function () {
+var validDescriptionInput = function (event) {
   if (!uploadDescription.validity.valid) {
     if (uploadDescription.validity.tooShort) {
       uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
@@ -178,6 +178,8 @@ var validDescriptionInput = function () {
       uploadDescription.setCustomValidity('не более 100 символов');
     } else if (uploadDescription.validity.valueMissing) {
       uploadDescription.setCustomValidity('Обязательное напиште комментарий');
+    } else {
+      uploadDescription.setCustomValidity('');
     }
   }
 };
@@ -209,7 +211,7 @@ var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
-  uploadDescription.addEventListener('invalid', validDescriptionInput);
+  uploadForm.addEventListener('click', validDescriptionInput);
   resizeDec.addEventListener('click', onDecClick);
   resizeInc.addEventListener('click', onIncClick);
   effectControls.addEventListener('click', onEffectControlsClick);
@@ -219,7 +221,7 @@ var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
-  uploadDescription.removeEventListener('invalid', validDescriptionInput);
+  uploadForm.removeEventListener('click', validDescriptionInput);
   resizeDec.removeEventListener('click', onDecClick);
   resizeInc.removeEventListener('click', onIncClick);
   effectControls.removeEventListener('click', onEffectControlsClick);
