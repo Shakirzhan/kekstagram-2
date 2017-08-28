@@ -230,6 +230,7 @@ var closeUploadOverlay = function () {
 
 // события закрытия и открытия формы кадрирования
 uploadFileInput.addEventListener('change', openUploadOverlay);
+
 uploadCancel.addEventListener('click', closeUploadOverlay);
 uploadCancel.addEventListener('keydown', function (event) {
   if (event.keyCode === ENTER_KEYCODE) {
