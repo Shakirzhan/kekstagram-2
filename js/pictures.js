@@ -227,19 +227,19 @@ var validHashtags = function (event) {
 
   if (arrHashtags.length > 5) {
     uploadHashtags.setCustomValidity('не более 5-ти хэштегов');
-    uploadHashtags.style.border = '2px solid red';
+    uploadHashtags.classList.add('upload-message-error');
   } else if (arrHashtags.length > 0 && isContentValid() === false) {
     uploadHashtags.setCustomValidity('хэш-тег должен начинаеться с символа `#` и быть не более 20 символов');
-    uploadHashtags.style.border = '2px solid red';
+    uploadHashtags.classList.add('upload-message-error');
   } else if (isMissingSpace() === false) {
     uploadHashtags.setCustomValidity('хэштеги должны разделяться пробелом');
-    uploadHashtags.style.border = '2px solid red';
+    uploadHashtags.classList.add('upload-message-error');
   } else if (isRepeatValid() === false) {
     uploadHashtags.setCustomValidity('одинаковые хэштеги');
-    uploadHashtags.style.border = '2px solid red';
+    uploadHashtags.classList.add('upload-message-error');
   } else {
     uploadHashtags.setCustomValidity('');
-    uploadHashtags.style.border = '';
+    uploadHashtags.classList.remove('upload-message-error');
   }
 };
 
@@ -247,16 +247,16 @@ var validHashtags = function (event) {
 var validDescriptionInput = function (event) {
   if (uploadDescription.validity.tooShort) {
     uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
-    uploadDescription.style.border = '2px solid red';
+    uploadDescription.classList.add('upload-message-error');
   } else if (uploadDescription.validity.tooLong) {
     uploadDescription.setCustomValidity('не более 100 символов');
-    uploadDescription.style.border = '2px solid red';
+    uploadDescription.classList.add('upload-message-error');
   } else if (uploadDescription.validity.valueMissing) {
     uploadDescription.setCustomValidity('Обязательное напиште комментарий');
-    uploadDescription.style.border = '2px solid red';
+    uploadDescription.classList.add('upload-message-error');
   } else {
     uploadDescription.setCustomValidity('');
-    uploadDescription.style.border = '';
+    uploadDescription.classList.remove('upload-message-error');
   }
 };
 // общая проверка инпутов
@@ -273,7 +273,6 @@ var openUploadOverlay = function () {
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
   uploadForm.addEventListener('input', validInputs);
-  // uploadDescription.addEventListener('invalid', validDescriptionInput);
   resizeDec.addEventListener('click', onDecClick);
   resizeInc.addEventListener('click', onIncClick);
   effectControls.addEventListener('click', onEffectControlsClick);
@@ -284,7 +283,6 @@ var closeUploadOverlay = function () {
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
   uploadForm.removeEventListener('input', validInputs);
-  // uploadDescription.removeEventListener('invalid', validDescriptionInput);
   resizeDec.removeEventListener('click', onDecClick);
   resizeInc.removeEventListener('click', onIncClick);
   effectControls.removeEventListener('click', onEffectControlsClick);
