@@ -199,7 +199,7 @@ var validHashtags = function (event) {
 
   var isContentValid = function () {
     for (var i = 0; i < arrHashtags.length; i++) {
-      if (arrHashtags[i].slice(0, 1) !== '#' || arrHashtags[i].length > 20) {
+      if (arrHashtags[i].slice(0, 1) !== '#' || arrHashtags[i].length === 1 || arrHashtags[i].length > 20) {
         return false;
       }
     }
