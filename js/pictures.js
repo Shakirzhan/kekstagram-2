@@ -157,6 +157,7 @@ var uploadImage = uploadForm.querySelector('.upload-image');
 var uploadOverlay = uploadForm.querySelector('.upload-overlay');
 var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
 var uploadDescription = uploadForm.querySelector('.upload-form-description');
+var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
 var effectControls = uploadForm.querySelector('.upload-effect-controls');
 var effectPreview = uploadForm.querySelector('.effect-image-preview');
 var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
@@ -167,20 +168,6 @@ var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
 var onUploadOverlayEscPress = function (event) {
   if (event.keyCode === ESC_KEYCODE && event.target !== uploadDescription) {
     closeUploadOverlay();
-  }
-};
-// проверка поля с комментариями
-var validDescriptionInput = function (event) {
-  if (!uploadDescription.validity.valid) {
-    if (uploadDescription.validity.tooShort) {
-      uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
-    } else if (uploadDescription.validity.tooLong) {
-      uploadDescription.setCustomValidity('не более 100 символов');
-    } else if (uploadDescription.validity.valueMissing) {
-      uploadDescription.setCustomValidity('Обязательное напиште комментарий');
-    } else {
-      uploadDescription.setCustomValidity('');
-    }
   }
 };
 // обработчик кнопки масштаба минус и плюс
@@ -206,12 +193,77 @@ var onEffectControlsClick = function (event) {
     effectPreview.classList.add(event.target.id.slice(7));
   }
 };
+// проверка поля с хэштегом
+var validHashtags = function (event) {
+  var arrHashtags = uploadHashtags.value.split(' ');
+
+  var isContentValid = function () {
+    for (var i = 0; i < arrHashtags.length; i++) {
+      if (arrHashtags[i].slice(0, 1) !== '#' || arrHashtags[i].length > 20) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  var isRepeatValid = function () {
+    var newArr = [];
+    for (var i = 0; i < arrHashtags.length; i++) {
+      if (newArr.indexOf(arrHashtags[i]) === -1) {
+        newArr[newArr.length] = arrHashtags[i];
+      } else {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  var isMissingSpace = function () {
+    for (var i = 0; i < arrHashtags.length; i++) {
+      if (arrHashtags[i].indexOf('#', 1) !== -1) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  if (arrHashtags.length > 5) {
+    uploadHashtags.setCustomValidity('не более 5-ти хэштегов');
+  } else if (isContentValid() === false) {
+    event.preventDefault();
+    uploadHashtags.setCustomValidity('хэш-тег должен начинаеться с символа `#` и быть не более 20 символов');
+  } else if (isMissingSpace() === false) {
+    event.preventDefault();
+    uploadHashtags.setCustomValidity('хэштеги должны разделяться пробелом');
+  } else if (isRepeatValid() === false) {
+    event.preventDefault();
+    uploadHashtags.setCustomValidity('одинаковые хэштеги');
+  } else {
+    uploadHashtags.setCustomValidity('');
+  }
+};
+
+// проверка поля с комментариями
+var validDescriptionInput = function (event) {
+  if (!uploadDescription.validity.valid) {
+    if (uploadDescription.validity.tooShort) {
+      uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
+    } else if (uploadDescription.validity.tooLong) {
+      uploadDescription.setCustomValidity('не более 100 символов');
+    } else if (uploadDescription.validity.valueMissing) {
+      uploadDescription.setCustomValidity('Обязательное напиште комментарий');
+    } else {
+      uploadDescription.setCustomValidity('');
+    }
+  }
+};
 // функция открытия формы кадрирования
 var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
-  uploadForm.addEventListener('click', validDescriptionInput);
+  uploadForm.addEventListener('input', validHashtags);
+  uploadDescription.addEventListener('invalid', validDescriptionInput);
   resizeDec.addEventListener('click', onDecClick);
   resizeInc.addEventListener('click', onIncClick);
   effectControls.addEventListener('click', onEffectControlsClick);
@@ -221,7 +273,7 @@ var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
-  uploadForm.removeEventListener('click', validDescriptionInput);
+  uploadDescription.removeEventListener('invalid', validDescriptionInput);
   resizeDec.removeEventListener('click', onDecClick);
   resizeInc.removeEventListener('click', onIncClick);
   effectControls.removeEventListener('click', onEffectControlsClick);
