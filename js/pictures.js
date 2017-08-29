@@ -205,7 +205,6 @@ var validHashtags = function (event) {
     }
     return true;
   };
-
   var isRepeatValid = function () {
     var newArr = [];
     for (var i = 0; i < arrHashtags.length; i++) {
@@ -217,7 +216,6 @@ var validHashtags = function (event) {
     }
     return true;
   };
-
   var isMissingSpace = function () {
     for (var i = 0; i < arrHashtags.length; i++) {
       if (arrHashtags[i].indexOf('#', 1) !== -1) {
@@ -229,32 +227,44 @@ var validHashtags = function (event) {
 
   if (arrHashtags.length > 5) {
     uploadHashtags.setCustomValidity('не более 5-ти хэштегов');
-  } else if (isContentValid() === false) {
-    event.preventDefault();
+    uploadHashtags.style.border = '2px solid red';
+  } else if (arrHashtags.length > 0 && isContentValid() === false) {
     uploadHashtags.setCustomValidity('хэш-тег должен начинаеться с символа `#` и быть не более 20 символов');
+    uploadHashtags.style.border = '2px solid red';
   } else if (isMissingSpace() === false) {
-    event.preventDefault();
     uploadHashtags.setCustomValidity('хэштеги должны разделяться пробелом');
+    uploadHashtags.style.border = '2px solid red';
   } else if (isRepeatValid() === false) {
-    event.preventDefault();
     uploadHashtags.setCustomValidity('одинаковые хэштеги');
+    uploadHashtags.style.border = '2px solid red';
   } else {
     uploadHashtags.setCustomValidity('');
+    uploadHashtags.style.border = '';
   }
 };
 
 // проверка поля с комментариями
 var validDescriptionInput = function (event) {
-  if (!uploadDescription.validity.valid) {
-    if (uploadDescription.validity.tooShort) {
-      uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
-    } else if (uploadDescription.validity.tooLong) {
-      uploadDescription.setCustomValidity('не более 100 символов');
-    } else if (uploadDescription.validity.valueMissing) {
-      uploadDescription.setCustomValidity('Обязательное напиште комментарий');
-    } else {
-      uploadDescription.setCustomValidity('');
-    }
+  if (uploadDescription.validity.tooShort) {
+    uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
+    uploadDescription.style.border = '2px solid red';
+  } else if (uploadDescription.validity.tooLong) {
+    uploadDescription.setCustomValidity('не более 100 символов');
+    uploadDescription.style.border = '2px solid red';
+  } else if (uploadDescription.validity.valueMissing) {
+    uploadDescription.setCustomValidity('Обязательное напиште комментарий');
+    uploadDescription.style.border = '2px solid red';
+  } else {
+    uploadDescription.setCustomValidity('');
+    uploadDescription.style.border = '';
+  }
+};
+// общая проверка инпутов
+var validInputs = function (event) {
+  if (event.target === uploadHashtags) {
+    validHashtags();
+  } else if (event.target === uploadDescription) {
+    validDescriptionInput();
   }
 };
 // функция открытия формы кадрирования
@@ -262,8 +272,8 @@ var openUploadOverlay = function () {
   uploadImage.classList.add('hidden');
   uploadOverlay.classList.remove('hidden');
   document.addEventListener('keydown', onUploadOverlayEscPress);
-  uploadForm.addEventListener('input', validHashtags);
-  uploadDescription.addEventListener('invalid', validDescriptionInput);
+  uploadForm.addEventListener('input', validInputs);
+  // uploadDescription.addEventListener('invalid', validDescriptionInput);
   resizeDec.addEventListener('click', onDecClick);
   resizeInc.addEventListener('click', onIncClick);
   effectControls.addEventListener('click', onEffectControlsClick);
@@ -273,7 +283,8 @@ var closeUploadOverlay = function () {
   uploadOverlay.classList.add('hidden');
   uploadImage.classList.remove('hidden');
   document.removeEventListener('keydown', onUploadOverlayEscPress);
-  uploadDescription.removeEventListener('invalid', validDescriptionInput);
+  uploadForm.removeEventListener('input', validInputs);
+  // uploadDescription.removeEventListener('invalid', validDescriptionInput);
   resizeDec.removeEventListener('click', onDecClick);
   resizeInc.removeEventListener('click', onIncClick);
   effectControls.removeEventListener('click', onEffectControlsClick);
