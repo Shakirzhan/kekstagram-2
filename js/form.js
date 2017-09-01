@@ -36,9 +36,9 @@
     effectPreview.style.transform = 'scale(' + (value / 100) + ')';
   };
   // обработчик изменения фильтров
-  var onEffectControlsClick = function (event) {
-    if (event.target.name === 'effect') {
-      if (event.target.value === 'none') {
+  var onEffectControlsClick = function (evt) {
+    if (evt.target.name === 'effect') {
+      if (evt.target.value === 'none') {
         effectLevel.classList.add('hidden');
       } else {
         effectLevel.classList.remove('hidden');
@@ -46,43 +46,45 @@
 
       effectPreview.removeAttribute('class');
       effectPreview.classList.add('effect-image-preview');
-      effectPreview.classList.add(event.target.id.slice(7));
+      effectPreview.classList.add(evt.target.id.slice(7));
 
       effectDrag.style.left = DEFAULT_EFFECT + '%';
       effectValue.style.width = DEFAULT_EFFECT + '%';
 
       // фильтры по умолчанию
-      if (effectPreview.classList.contains('effect-none')) {
-        effectPreview.style.filter = '';
-      }
-      if (effectPreview.classList.contains('effect-chrome')) {
-        effectPreview.style.filter = 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
-      }
-      if (effectPreview.classList.contains('effect-sepia')) {
-        effectPreview.style.filter = 'sepia(' + (DEFAULT_EFFECT / 100) + ')';
-      }
-      if (effectPreview.classList.contains('effect-marvin')) {
-        effectPreview.style.filter = 'invert(' + DEFAULT_EFFECT + '%)';
-      }
-      if (effectPreview.classList.contains('effect-phobos')) {
-        effectPreview.style.filter = 'blur(' + (DEFAULT_EFFECT / 33.3) + 'px)';
-      }
-      if (effectPreview.classList.contains('effect-heat')) {
-        effectPreview.style.filter = 'brightness(' + (DEFAULT_EFFECT / 33.3) + ')';
+      switch (true) {
+        case effectPreview.classList.contains('effect-none'):
+          effectPreview.style.filter = '';
+          break;
+        case effectPreview.classList.contains('effect-chrome'):
+          effectPreview.style.filter = 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
+          break;
+        case effectPreview.classList.contains('effect-sepia'):
+          effectPreview.style.filter = 'sepia(' + (DEFAULT_EFFECT / 100) + ')';
+          break;
+        case effectPreview.classList.contains('effect-marvin'):
+          effectPreview.style.filter = 'invert(' + DEFAULT_EFFECT + '%)';
+          break;
+        case effectPreview.classList.contains('effect-phobos'):
+          effectPreview.style.filter = 'blur(' + (DEFAULT_EFFECT / 33.3) + 'px)';
+          break;
+        case effectPreview.classList.contains('effect-heat'):
+          effectPreview.style.filter = 'brightness(' + (DEFAULT_EFFECT / 33.3) + ')';
+          break;
       }
     }
   };
 
 
-  effectDrag.addEventListener('mousedown', function (event) {
-    event.preventDefault();
+  effectDrag.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
 
-    var startX = event.clientX;
-    var onMouseMove = function (moveEvent) {
-      moveEvent.preventDefault();
+    var startX = evt.clientX;
+    var onMouseMove = function (moveevt) {
+      moveevt.preventDefault();
 
-      var shiftX = startX - moveEvent.clientX;
-      startX = moveEvent.clientX;
+      var shiftX = startX - moveevt.clientX;
+      startX = moveevt.clientX;
       var positionX = ((effectDrag.offsetLeft - shiftX) / effectLine.offsetWidth) * 100;
 
       if (positionX >= 0 && positionX <= 100) {
@@ -90,30 +92,31 @@
         effectValue.style.width = positionX + '%';
         var filterValue = positionX;
       }
-
       // изменение фильтров
-      if (effectPreview.classList.contains('effect-none')) {
-        effectPreview.style.filter = '';
-      }
-      if (effectPreview.classList.contains('effect-chrome')) {
-        effectPreview.style.filter = 'grayscale(' + (filterValue / 100) + ')';
-      }
-      if (effectPreview.classList.contains('effect-sepia')) {
-        effectPreview.style.filter = 'sepia(' + (filterValue / 100) + ')';
-      }
-      if (effectPreview.classList.contains('effect-marvin')) {
-        effectPreview.style.filter = 'invert(' + filterValue + '%)';
-      }
-      if (effectPreview.classList.contains('effect-phobos')) {
-        effectPreview.style.filter = 'blur(' + (filterValue / 33.3) + 'px)';
-      }
-      if (effectPreview.classList.contains('effect-heat')) {
-        effectPreview.style.filter = 'brightness(' + (filterValue / 33.3) + ')';
+      switch (true) {
+        case effectPreview.classList.contains('effect-none'):
+          effectPreview.style.filter = '';
+          break;
+        case effectPreview.classList.contains('effect-chrome'):
+          effectPreview.style.filter = 'grayscale(' + (filterValue / 100) + ')';
+          break;
+        case effectPreview.classList.contains('effect-sepia'):
+          effectPreview.style.filter = 'sepia(' + (filterValue / 100) + ')';
+          break;
+        case effectPreview.classList.contains('effect-marvin'):
+          effectPreview.style.filter = 'invert(' + filterValue + '%)';
+          break;
+        case effectPreview.classList.contains('effect-phobos'):
+          effectPreview.style.filter = 'blur(' + (filterValue / 33.3) + 'px)';
+          break;
+        case effectPreview.classList.contains('effect-heat'):
+          effectPreview.style.filter = 'brightness(' + (filterValue / 33.3) + ')';
+          break;
       }
     };
 
-    var onMouseUp = function (upEvent) {
-      upEvent.preventDefault();
+    var onMouseUp = function (upevt) {
+      upevt.preventDefault();
 
       document.removeEventListener('mousemove', onMouseMove);
       document.removeEventListener('mouseup', onMouseUp);
@@ -124,7 +127,7 @@
   });
 
   // проверка поля с хэштегом
-  var validHashtags = function (event) {
+  var validHashtags = function (evt) {
     var arrHashtags = uploadHashtags.value.split(' ');
 
     var isContentValid = function () {
@@ -174,7 +177,7 @@
   };
 
   // проверка поля с комментариями
-  var validDescriptionInput = function (event) {
+  var validDescriptionInput = function (evt) {
     if (uploadDescription.validity.tooShort) {
       uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
       uploadDescription.classList.add('upload-message-error');
@@ -190,10 +193,10 @@
     }
   };
   // общая проверка инпутов
-  var validInputs = function (event) {
-    if (event.target === uploadHashtags) {
+  var validInputs = function (evt) {
+    if (evt.target === uploadHashtags) {
       validHashtags();
-    } else if (event.target === uploadDescription) {
+    } else if (evt.target === uploadDescription) {
       validDescriptionInput();
     }
   };
@@ -202,8 +205,8 @@
     uploadImage.classList.add('hidden');
     effectLevel.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', function (event) {
-      window.util.isEscEvent(event, closeUploadOverlay, uploadDescription);
+    document.addEventListener('keydown', function (evt) {
+      window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.addEventListener('input', validInputs);
     resizeDec.addEventListener('click', onDecClick);
@@ -214,8 +217,8 @@
   var closeUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
-    document.removeEventListener('keydown', function (event) {
-      window.util.isEscEvent(event, closeUploadOverlay, uploadDescription);
+    document.removeEventListener('keydown', function (evt) {
+      window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.removeEventListener('input', validInputs);
     resizeDec.removeEventListener('click', onDecClick);
@@ -227,7 +230,7 @@
   uploadFileInput.addEventListener('change', openUploadOverlay);
 
   uploadCancel.addEventListener('click', closeUploadOverlay);
-  uploadCancel.addEventListener('keydown', function (event) {
-    window.util.isEnterEvent(event, closeUploadOverlay);
+  uploadCancel.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, closeUploadOverlay);
   });
 })();
