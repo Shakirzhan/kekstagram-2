@@ -2,6 +2,49 @@
 
 (function () {
   var DEFAULT_EFFECT = 20;
+  var filterValue = null;
+  var FILTERS = {
+    'effect-chrome': {
+      'default': function () {
+        return 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
+      },
+      'custom': function () {
+        return 'grayscale(' + (filterValue / 100) + ')';
+      }
+    },
+    'effect-sepia': {
+      'default': function () {
+        return 'sepia(' + (DEFAULT_EFFECT / 100) + ')';
+      },
+      'custom': function () {
+        return 'sepia(' + (filterValue / 100) + ')';
+      }
+    },
+    'effect-marvin': {
+      'default': function () {
+        return 'invert(' + DEFAULT_EFFECT + '%)';
+      },
+      'custom': function () {
+        return 'invert(' + filterValue + '%)';
+      }
+    },
+    'effect-phobos': {
+      'default': function () {
+        return 'blur(' + (DEFAULT_EFFECT / 33.3) + 'px)';
+      },
+      'custom': function () {
+        return 'blur(' + (filterValue / 33.3) + 'px)';
+      }
+    },
+    'effect-heat': {
+      'default': function () {
+        return 'brightness(' + (DEFAULT_EFFECT / 33.3) + ')';
+      },
+      'custom': function () {
+        return 'brightness(' + (filterValue / 33.3) + ')';
+      }
+    }
+  };
 
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFileInput = uploadForm.querySelector('#upload-file');
@@ -57,24 +100,23 @@
           effectPreview.style.filter = '';
           break;
         case effectPreview.classList.contains('effect-chrome'):
-          effectPreview.style.filter = 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
+          effectPreview.style.filter = FILTERS['effect-chrome'].default();
           break;
         case effectPreview.classList.contains('effect-sepia'):
-          effectPreview.style.filter = 'sepia(' + (DEFAULT_EFFECT / 100) + ')';
+          effectPreview.style.filter = FILTERS['effect-sepia'].default();
           break;
         case effectPreview.classList.contains('effect-marvin'):
-          effectPreview.style.filter = 'invert(' + DEFAULT_EFFECT + '%)';
+          effectPreview.style.filter = FILTERS['effect-marvin'].default();
           break;
         case effectPreview.classList.contains('effect-phobos'):
-          effectPreview.style.filter = 'blur(' + (DEFAULT_EFFECT / 33.3) + 'px)';
+          effectPreview.style.filter = FILTERS['effect-phobos'].default();
           break;
         case effectPreview.classList.contains('effect-heat'):
-          effectPreview.style.filter = 'brightness(' + (DEFAULT_EFFECT / 33.3) + ')';
+          effectPreview.style.filter = FILTERS['effect-heat'].default();
           break;
       }
     }
   };
-
 
   effectDrag.addEventListener('mousedown', function (evt) {
     evt.preventDefault();
@@ -90,7 +132,7 @@
       if (positionX >= 0 && positionX <= 100) {
         effectDrag.style.left = positionX + '%';
         effectValue.style.width = positionX + '%';
-        var filterValue = positionX;
+        filterValue = positionX;
       }
       // изменение фильтров
       switch (true) {
@@ -98,19 +140,19 @@
           effectPreview.style.filter = '';
           break;
         case effectPreview.classList.contains('effect-chrome'):
-          effectPreview.style.filter = 'grayscale(' + (filterValue / 100) + ')';
+          effectPreview.style.filter = FILTERS['effect-chrome'].custom();
           break;
         case effectPreview.classList.contains('effect-sepia'):
-          effectPreview.style.filter = 'sepia(' + (filterValue / 100) + ')';
+          effectPreview.style.filter = FILTERS['effect-sepia'].custom();
           break;
         case effectPreview.classList.contains('effect-marvin'):
-          effectPreview.style.filter = 'invert(' + filterValue + '%)';
+          effectPreview.style.filter = FILTERS['effect-marvin'].custom();
           break;
         case effectPreview.classList.contains('effect-phobos'):
-          effectPreview.style.filter = 'blur(' + (filterValue / 33.3) + 'px)';
+          effectPreview.style.filter = FILTERS['effect-phobos'].custom();
           break;
         case effectPreview.classList.contains('effect-heat'):
-          effectPreview.style.filter = 'brightness(' + (filterValue / 33.3) + ')';
+          effectPreview.style.filter = FILTERS['effect-heat'].custom();
           break;
       }
     };
