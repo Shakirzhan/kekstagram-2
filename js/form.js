@@ -1,9 +1,37 @@
 'use strict';
 
 (function () {
-  var DEFAULT_EFFECT = 20;
+
+  var uploadForm = document.querySelector('#upload-select-image');
+  var uploadFileInput = uploadForm.querySelector('#upload-file');
+  var uploadImage = uploadForm.querySelector('.upload-image');
+  var uploadOverlay = uploadForm.querySelector('.upload-overlay');
+  var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
+  var uploadDescription = uploadForm.querySelector('.upload-form-description');
+  var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
+  var effectControls = uploadForm.querySelector('.upload-effect-controls');
+  var effectPreview = uploadForm.querySelector('.effect-image-preview');
+  var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
+  var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
+  var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
+  var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
+  var effectValue = uploadForm.querySelector('.upload-effect-level-val');
+  var effectLine = uploadForm.querySelector('.upload-effect-level-line');
+  var effectLevel = uploadForm.querySelector('.upload-effect-level');
+
+  // значения фильтров
   var filterValue = null;
+  var filterName = null;
+  var DEFAULT_EFFECT = 20;
   var FILTERS = {
+    'effect-none': {
+      'default': function () {
+        return '';
+      },
+      'custom': function () {
+        return '';
+      }
+    },
     'effect-chrome': {
       'default': function () {
         return 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
@@ -46,23 +74,6 @@
     }
   };
 
-  var uploadForm = document.querySelector('#upload-select-image');
-  var uploadFileInput = uploadForm.querySelector('#upload-file');
-  var uploadImage = uploadForm.querySelector('.upload-image');
-  var uploadOverlay = uploadForm.querySelector('.upload-overlay');
-  var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
-  var uploadDescription = uploadForm.querySelector('.upload-form-description');
-  var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
-  var effectControls = uploadForm.querySelector('.upload-effect-controls');
-  var effectPreview = uploadForm.querySelector('.effect-image-preview');
-  var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
-  var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
-  var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
-  var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
-  var effectValue = uploadForm.querySelector('.upload-effect-level-val');
-  var effectLine = uploadForm.querySelector('.upload-effect-level-line');
-  var effectLevel = uploadForm.querySelector('.upload-effect-level');
-
   // обработчик кнопки масштаба минус и плюс
   var onDecClick = function () {
     var value = parseInt(resizeValue.value, 10);
@@ -87,34 +98,17 @@
         effectLevel.classList.remove('hidden');
       }
 
+
+      filterName = 'effect-' + evt.target.value;
+
       effectPreview.removeAttribute('class');
       effectPreview.classList.add('effect-image-preview');
-      effectPreview.classList.add(evt.target.id.slice(7));
+      effectPreview.classList.add(filterName);
 
       effectDrag.style.left = DEFAULT_EFFECT + '%';
       effectValue.style.width = DEFAULT_EFFECT + '%';
 
-      // фильтры по умолчанию
-      switch (true) {
-        case effectPreview.classList.contains('effect-none'):
-          effectPreview.style.filter = '';
-          break;
-        case effectPreview.classList.contains('effect-chrome'):
-          effectPreview.style.filter = FILTERS['effect-chrome'].default();
-          break;
-        case effectPreview.classList.contains('effect-sepia'):
-          effectPreview.style.filter = FILTERS['effect-sepia'].default();
-          break;
-        case effectPreview.classList.contains('effect-marvin'):
-          effectPreview.style.filter = FILTERS['effect-marvin'].default();
-          break;
-        case effectPreview.classList.contains('effect-phobos'):
-          effectPreview.style.filter = FILTERS['effect-phobos'].default();
-          break;
-        case effectPreview.classList.contains('effect-heat'):
-          effectPreview.style.filter = FILTERS['effect-heat'].default();
-          break;
-      }
+      effectPreview.style.filter = FILTERS[filterName].default();
     }
   };
 
@@ -134,27 +128,9 @@
         effectValue.style.width = positionX + '%';
         filterValue = positionX;
       }
-      // изменение фильтров
-      switch (true) {
-        case effectPreview.classList.contains('effect-none'):
-          effectPreview.style.filter = '';
-          break;
-        case effectPreview.classList.contains('effect-chrome'):
-          effectPreview.style.filter = FILTERS['effect-chrome'].custom();
-          break;
-        case effectPreview.classList.contains('effect-sepia'):
-          effectPreview.style.filter = FILTERS['effect-sepia'].custom();
-          break;
-        case effectPreview.classList.contains('effect-marvin'):
-          effectPreview.style.filter = FILTERS['effect-marvin'].custom();
-          break;
-        case effectPreview.classList.contains('effect-phobos'):
-          effectPreview.style.filter = FILTERS['effect-phobos'].custom();
-          break;
-        case effectPreview.classList.contains('effect-heat'):
-          effectPreview.style.filter = FILTERS['effect-heat'].custom();
-          break;
-      }
+
+      effectPreview.style.filter = FILTERS[filterName].custom();
+
     };
 
     var onMouseUp = function (upevt) {
