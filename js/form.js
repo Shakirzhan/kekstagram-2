@@ -1,6 +1,7 @@
 'use strict';
 
 (function () {
+
   var uploadForm = document.querySelector('#upload-select-image');
   var uploadFileInput = uploadForm.querySelector('#upload-file');
   var uploadImage = uploadForm.querySelector('.upload-image');
@@ -13,6 +14,65 @@
   var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
   var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
   var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
+  var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
+  var effectValue = uploadForm.querySelector('.upload-effect-level-val');
+  var effectLine = uploadForm.querySelector('.upload-effect-level-line');
+  var effectLevel = uploadForm.querySelector('.upload-effect-level');
+
+  // значения фильтров
+  var filterValue = null;
+  var filterName = null;
+  var DEFAULT_EFFECT = 20;
+  var FILTERS = {
+    'effect-none': {
+      'default': function () {
+        return '';
+      },
+      'custom': function () {
+        return '';
+      }
+    },
+    'effect-chrome': {
+      'default': function () {
+        return 'grayscale(' + (DEFAULT_EFFECT / 100) + ')';
+      },
+      'custom': function () {
+        return 'grayscale(' + (filterValue / 100) + ')';
+      }
+    },
+    'effect-sepia': {
+      'default': function () {
+        return 'sepia(' + (DEFAULT_EFFECT / 100) + ')';
+      },
+      'custom': function () {
+        return 'sepia(' + (filterValue / 100) + ')';
+      }
+    },
+    'effect-marvin': {
+      'default': function () {
+        return 'invert(' + DEFAULT_EFFECT + '%)';
+      },
+      'custom': function () {
+        return 'invert(' + filterValue + '%)';
+      }
+    },
+    'effect-phobos': {
+      'default': function () {
+        return 'blur(' + (DEFAULT_EFFECT / 33.3) + 'px)';
+      },
+      'custom': function () {
+        return 'blur(' + (filterValue / 33.3) + 'px)';
+      }
+    },
+    'effect-heat': {
+      'default': function () {
+        return 'brightness(' + (DEFAULT_EFFECT / 33.3) + ')';
+      },
+      'custom': function () {
+        return 'brightness(' + (filterValue / 33.3) + ')';
+      }
+    }
+  };
 
   // обработчик кнопки масштаба минус и плюс
   var onDecClick = function () {
@@ -30,15 +90,62 @@
     effectPreview.style.transform = 'scale(' + (value / 100) + ')';
   };
   // обработчик изменения фильтров
-  var onEffectControlsClick = function (event) {
-    if (event.target.name === 'effect') {
+  var onEffectControlsClick = function (evt) {
+    if (evt.target.name === 'effect') {
+      if (evt.target.value === 'none') {
+        effectLevel.classList.add('hidden');
+      } else {
+        effectLevel.classList.remove('hidden');
+      }
+
+
+      filterName = 'effect-' + evt.target.value;
+
       effectPreview.removeAttribute('class');
       effectPreview.classList.add('effect-image-preview');
-      effectPreview.classList.add(event.target.id.slice(7));
+      effectPreview.classList.add(filterName);
+
+      effectDrag.style.left = DEFAULT_EFFECT + '%';
+      effectValue.style.width = DEFAULT_EFFECT + '%';
+
+      effectPreview.style.filter = FILTERS[filterName].default();
     }
   };
+
+  effectDrag.addEventListener('mousedown', function (evt) {
+    evt.preventDefault();
+
+    var startX = evt.clientX;
+    var onMouseMove = function (moveevt) {
+      moveevt.preventDefault();
+
+      var shiftX = startX - moveevt.clientX;
+      startX = moveevt.clientX;
+      var positionX = ((effectDrag.offsetLeft - shiftX) / effectLine.offsetWidth) * 100;
+
+      if (positionX >= 0 && positionX <= 100) {
+        effectDrag.style.left = positionX + '%';
+        effectValue.style.width = positionX + '%';
+        filterValue = positionX;
+      }
+
+      effectPreview.style.filter = FILTERS[filterName].custom();
+
+    };
+
+    var onMouseUp = function (upevt) {
+      upevt.preventDefault();
+
+      document.removeEventListener('mousemove', onMouseMove);
+      document.removeEventListener('mouseup', onMouseUp);
+    };
+
+    document.addEventListener('mousemove', onMouseMove);
+    document.addEventListener('mouseup', onMouseUp);
+  });
+
   // проверка поля с хэштегом
-  var validHashtags = function (event) {
+  var validHashtags = function (evt) {
     var arrHashtags = uploadHashtags.value.split(' ');
 
     var isContentValid = function () {
@@ -88,7 +195,7 @@
   };
 
   // проверка поля с комментариями
-  var validDescriptionInput = function (event) {
+  var validDescriptionInput = function (evt) {
     if (uploadDescription.validity.tooShort) {
       uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
       uploadDescription.classList.add('upload-message-error');
@@ -104,19 +211,20 @@
     }
   };
   // общая проверка инпутов
-  var validInputs = function (event) {
-    if (event.target === uploadHashtags) {
+  var validInputs = function (evt) {
+    if (evt.target === uploadHashtags) {
       validHashtags();
-    } else if (event.target === uploadDescription) {
+    } else if (evt.target === uploadDescription) {
       validDescriptionInput();
     }
   };
   // функция открытия формы кадрирования
   var openUploadOverlay = function () {
     uploadImage.classList.add('hidden');
+    effectLevel.classList.add('hidden');
     uploadOverlay.classList.remove('hidden');
-    document.addEventListener('keydown', function (event) {
-      window.util.isEscEvent(event, closeUploadOverlay, uploadDescription);
+    document.addEventListener('keydown', function (evt) {
+      window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.addEventListener('input', validInputs);
     resizeDec.addEventListener('click', onDecClick);
@@ -127,8 +235,8 @@
   var closeUploadOverlay = function () {
     uploadOverlay.classList.add('hidden');
     uploadImage.classList.remove('hidden');
-    document.removeEventListener('keydown', function (event) {
-      window.util.isEscEvent(event, closeUploadOverlay, uploadDescription);
+    document.removeEventListener('keydown', function (evt) {
+      window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.removeEventListener('input', validInputs);
     resizeDec.removeEventListener('click', onDecClick);
@@ -140,8 +248,7 @@
   uploadFileInput.addEventListener('change', openUploadOverlay);
 
   uploadCancel.addEventListener('click', closeUploadOverlay);
-  uploadCancel.addEventListener('keydown', function (event) {
-    window.util.isEnterEvent(event, closeUploadOverlay);
+  uploadCancel.addEventListener('keydown', function (evt) {
+    window.util.isEnterEvent(evt, closeUploadOverlay);
   });
-
 })();
