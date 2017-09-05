@@ -11,9 +11,7 @@
   var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
   var effectControls = uploadForm.querySelector('.upload-effect-controls');
   var effectPreview = uploadForm.querySelector('.effect-image-preview');
-  var resizeValue = uploadForm.querySelector('.upload-resize-controls-value');
-  var resizeDec = uploadForm.querySelector('.upload-resize-controls-button-dec');
-  var resizeInc = uploadForm.querySelector('.upload-resize-controls-button-inc');
+  var resizeControls = uploadForm.querySelector('.upload-resize-controls');
   var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
   var effectValue = uploadForm.querySelector('.upload-effect-level-val');
   var effectLine = uploadForm.querySelector('.upload-effect-level-line');
@@ -74,21 +72,11 @@
     }
   };
 
-  // обработчик кнопки масштаба минус и плюс
-  var onDecClick = function () {
-    var value = parseInt(resizeValue.value, 10);
-    value -= 25;
-    value = (value < 25) ? 25 : value;
-    resizeValue.value = value + '%';
-    effectPreview.style.transform = 'scale(' + (value / 100) + ')';
+  // для обработчика кнопок минус и плюc
+  var adjustScale = function (value) {
+    effectPreview.style.transform = 'scale(' + value / 100 + ')';
   };
-  var onIncClick = function () {
-    var value = parseInt(resizeValue.value, 10);
-    value += 25;
-    value = (value > 100) ? 100 : value;
-    resizeValue.value = value + '%';
-    effectPreview.style.transform = 'scale(' + (value / 100) + ')';
-  };
+
   // обработчик изменения фильтров
   var onEffectControlsClick = function (evt) {
     if (evt.target.name === 'effect') {
@@ -98,12 +86,14 @@
         effectLevel.classList.remove('hidden');
       }
 
-
       filterName = 'effect-' + evt.target.value;
 
-      effectPreview.removeAttribute('class');
-      effectPreview.classList.add('effect-image-preview');
-      effectPreview.classList.add(filterName);
+      var applyFilter = function (newValue) {
+        effectPreview.removeAttribute('class');
+        effectPreview.classList.add('effect-image-preview');
+        effectPreview.classList.add('effect-' + newValue);
+      };
+      window.initializefilters(evt.target, applyFilter);
 
       effectDrag.style.left = DEFAULT_EFFECT + '%';
       effectValue.style.width = DEFAULT_EFFECT + '%';
@@ -130,7 +120,6 @@
       }
 
       effectPreview.style.filter = FILTERS[filterName].custom();
-
     };
 
     var onMouseUp = function (upevt) {
@@ -227,8 +216,9 @@
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.addEventListener('input', validInputs);
-    resizeDec.addEventListener('click', onDecClick);
-    resizeInc.addEventListener('click', onIncClick);
+    resizeControls.addEventListener('click', function (evt) {
+      window.initializeScale(evt, resizeControls, adjustScale);
+    });
     effectControls.addEventListener('click', onEffectControlsClick);
   };
   // функция закрытия формы кадрирования
@@ -239,8 +229,9 @@
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.removeEventListener('input', validInputs);
-    resizeDec.removeEventListener('click', onDecClick);
-    resizeInc.removeEventListener('click', onIncClick);
+    resizeControls.removeEventListener('click', function (evt) {
+      window.initializeScale(evt, resizeControls, adjustScale);
+    });
     effectControls.removeEventListener('click', onEffectControlsClick);
   };
 
