@@ -216,6 +216,9 @@
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.addEventListener('input', validInputs);
+    uploadForm.addEventListener('submit', function (evt) {
+      onSubmitClick(evt);
+    });
     resizeControls.addEventListener('click', function (evt) {
       window.initializeScale(evt, resizeControls, adjustScale);
     });
@@ -229,6 +232,9 @@
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
     uploadForm.removeEventListener('input', validInputs);
+    uploadForm.removeEventListener('submit', function (evt) {
+      onSubmitClick(evt);
+    });
     resizeControls.removeEventListener('click', function (evt) {
       window.initializeScale(evt, resizeControls, adjustScale);
     });
@@ -242,4 +248,12 @@
   uploadCancel.addEventListener('keydown', function (evt) {
     window.util.isEnterEvent(evt, closeUploadOverlay);
   });
+  // module6
+  var onSubmitClick = function (evt) {
+    evt.preventDefault();
+    window.backend.save(new FormData(uploadForm), function () {
+      closeUploadOverlay();
+    }, window.util.onError);
+    uploadForm.reset();
+  };
 })();
