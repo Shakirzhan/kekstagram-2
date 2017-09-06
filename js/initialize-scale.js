@@ -10,14 +10,13 @@
       case evt.target === resizeDec:
         value -= 25;
         value = (value < 25) ? 25 : value;
-        element.querySelector('input').value = value + '%';
         break;
       case evt.target === resizeInc:
         value += 25;
         value = (value > 100) ? 100 : value;
-        element.querySelector('input').value = value + '%';
         break;
     }
+    element.querySelector('input').value = value + '%';
     if (typeof adjust === 'function') {
       adjust(value);
     }
