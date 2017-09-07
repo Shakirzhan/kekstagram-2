@@ -1,5 +1,7 @@
 'use strict';
 (function () {
+  var COUNT_PICTURES = 25;
+
   var pictureTemplate = document.querySelector('#picture-template').content;
 
   var renderPicturesElement = function (array) {
@@ -15,7 +17,7 @@
   window.picture = {
     renderFragment: function (array) {
       var fragment = document.createDocumentFragment();
-      for (var i = 0; i < array.length; i++) {
+      for (var i = 0; i < COUNT_PICTURES; i++) {
         fragment.appendChild(renderPicturesElement(array[i]));
       }
       return fragment;

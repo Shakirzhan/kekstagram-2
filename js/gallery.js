@@ -1,15 +1,36 @@
 'use strict';
 
 (function () {
-  var COUNT_PICTURES = 25;
   var picturesBlock = document.querySelector('.pictures');
-  var picturesArray = window.data.generatePhotosArray(COUNT_PICTURES);
   var closeGalleryBtn = document.querySelector('.gallery-overlay-close');
 
+  var onLoad = function (pictures) {
+    // добавление картинок
+    picturesBlock.appendChild(window.picture.renderFragment(pictures));
 
-  picturesBlock.appendChild(window.picture.renderFragment(picturesArray));
-  window.preview.renderOverlay(picturesArray[0]);
+    // обработка кликов по картинкам
+    var onPictureClick = function (evt) {
+      evt.preventDefault();
+      window.preview.getPicture(evt.currentTarget);
+      openGallery();
+      return;
+    };
+    var pictureCollection = document.querySelectorAll('.picture');
+    if (pictureCollection.length > 0) {
+      [].forEach.call(pictureCollection, function (picture) {
+        picture.addEventListener('click', onPictureClick);
+      });
+    }
+    if (pictureCollection.length > 0) {
+      [].forEach.call(pictureCollection, function (picture) {
+        picture.addEventListener('keydown', function (evt) {
+          window.util.isEnterEvent(evt, onPictureClick);
+        });
+      });
+    }
+  };
 
+  window.backend.load(onLoad, window.util.onError);
 
   var openGallery = function () {
     window.galleryOverlay.classList.remove('hidden');
@@ -31,27 +52,4 @@
   closeGalleryBtn.addEventListener('keydown', function (evt) {
     window.util.isEnterEvent(evt, closeGallery);
   });
-
-  var onPictureClick = function (evt) {
-    evt.preventDefault();
-    window.preview.getPicture(evt.currentTarget);
-    openGallery();
-    return;
-  };
-
-  var pictureCollection = document.querySelectorAll('.picture');
-
-  if (pictureCollection.length > 0) {
-    [].forEach.call(pictureCollection, function (picture) {
-      picture.addEventListener('click', onPictureClick);
-    });
-  }
-
-  if (pictureCollection.length > 0) {
-    [].forEach.call(pictureCollection, function (picture) {
-      picture.addEventListener('keydown', function (evt) {
-        window.util.isEnterEvent(evt, onPictureClick);
-      });
-    });
-  }
 })();
