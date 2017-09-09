@@ -1,11 +1,10 @@
 'use strict';
 (function () {
   var COUNT_PICTURES = 25;
-
+  var pictures = document.querySelector('.pictures');
   var pictureTemplate = document.querySelector('#picture-template').content;
 
   var renderPicturesElement = function (array) {
-
     var picturesElement = pictureTemplate.cloneNode(true);
 
     picturesElement.querySelector('img').setAttribute('src', array.url);
@@ -14,13 +13,20 @@
 
     return picturesElement;
   };
-  window.picture = {
-    renderFragment: function (array) {
-      var fragment = document.createDocumentFragment();
-      for (var i = 0; i < COUNT_PICTURES; i++) {
-        fragment.appendChild(renderPicturesElement(array[i]));
-      }
-      return fragment;
+
+  var renderFragment = function (data) {
+    var takeNumber = data.length > COUNT_PICTURES ? COUNT_PICTURES : data.length;
+
+    var fragment = document.createDocumentFragment();
+    for (var i = 0; i < takeNumber; i++) {
+      fragment.appendChild(renderPicturesElement(data[i]));
     }
+
+    return fragment;
+  };
+
+  window.render = function (data) {
+    pictures.innerHTML = '';
+    pictures.appendChild(renderFragment(data));
   };
 })();
