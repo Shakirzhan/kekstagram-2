@@ -25,8 +25,12 @@
     return fragment;
   };
 
-  window.render = function (data) {
+  window.render = function (data, fun) {
     pictures.innerHTML = '';
     pictures.appendChild(renderFragment(data));
+
+    if (typeof fun === 'function') {
+      fun();
+    }
   };
 })();
