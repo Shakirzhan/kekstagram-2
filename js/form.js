@@ -185,14 +185,8 @@
 
   // проверка поля с комментариями
   var validDescriptionInput = function (evt) {
-    if (uploadDescription.validity.tooShort) {
-      uploadDescription.setCustomValidity('напишите, пожалуйста, минимум 30 символов');
-      uploadDescription.classList.add('upload-message-error');
-    } else if (uploadDescription.validity.tooLong) {
-      uploadDescription.setCustomValidity('не более 100 символов');
-      uploadDescription.classList.add('upload-message-error');
-    } else if (uploadDescription.validity.valueMissing) {
-      uploadDescription.setCustomValidity('Обязательное напиште комментарий');
+    if (uploadDescription.validity.tooLong) {
+      uploadDescription.setCustomValidity('не более 140 символов');
       uploadDescription.classList.add('upload-message-error');
     } else {
       uploadDescription.setCustomValidity('');
