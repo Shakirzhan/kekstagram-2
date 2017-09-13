@@ -1,7 +1,7 @@
 'use strict';
 
 (function () {
-  window.initializefilters = function (element, change) {
+  window.initializeFilters = function (element, change) {
     var newValue = element.value;
 
     if (typeof change === 'function') {

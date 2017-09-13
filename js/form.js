@@ -1,25 +1,8 @@
 'use strict';
 
 (function () {
+// значения фильтров
 
-  var uploadForm = document.querySelector('#upload-select-image');
-  var uploadFileInput = uploadForm.querySelector('#upload-file');
-  var uploadImage = uploadForm.querySelector('.upload-image');
-  var uploadOverlay = uploadForm.querySelector('.upload-overlay');
-  var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
-  var uploadDescription = uploadForm.querySelector('.upload-form-description');
-  var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
-  var effectControls = uploadForm.querySelector('.upload-effect-controls');
-  var effectPreview = uploadForm.querySelector('.effect-image-preview');
-  var resizeControls = uploadForm.querySelector('.upload-resize-controls');
-  var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
-  var effectValue = uploadForm.querySelector('.upload-effect-level-val');
-  var effectLine = uploadForm.querySelector('.upload-effect-level-line');
-  var effectLevel = uploadForm.querySelector('.upload-effect-level');
-
-  // значения фильтров
-  var filterValue = null;
-  var filterName = null;
   var DEFAULT_EFFECT = 20;
   var FILTERS = {
     'effect-none': {
@@ -71,6 +54,23 @@
       }
     }
   };
+  var filterValue = null;
+  var filterName = null;
+
+  var uploadForm = document.querySelector('#upload-select-image');
+  var uploadFileInput = uploadForm.querySelector('#upload-file');
+  var uploadImage = uploadForm.querySelector('.upload-image');
+  var uploadOverlay = uploadForm.querySelector('.upload-overlay');
+  var uploadCancel = uploadForm.querySelector('.upload-form-cancel');
+  var uploadDescription = uploadForm.querySelector('.upload-form-description');
+  var uploadHashtags = uploadForm.querySelector('.upload-form-hashtags');
+  var effectControls = uploadForm.querySelector('.upload-effect-controls');
+  var effectPreview = uploadForm.querySelector('.effect-image-preview');
+  var resizeControls = uploadForm.querySelector('.upload-resize-controls');
+  var effectDrag = uploadForm.querySelector('.upload-effect-level-pin');
+  var effectValue = uploadForm.querySelector('.upload-effect-level-val');
+  var effectLine = uploadForm.querySelector('.upload-effect-level-line');
+  var effectLevel = uploadForm.querySelector('.upload-effect-level');
 
   // для обработчика кнопок минус и плюc
   var adjustScale = function (value) {
@@ -93,7 +93,7 @@
         effectPreview.classList.add('effect-image-preview');
         effectPreview.classList.add('effect-' + newValue);
       };
-      window.initializefilters(evt.target, applyFilter);
+      window.initializeFilters(evt.target, applyFilter);
 
       effectDrag.style.left = DEFAULT_EFFECT + '%';
       effectValue.style.width = DEFAULT_EFFECT + '%';
