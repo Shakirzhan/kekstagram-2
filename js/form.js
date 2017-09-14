@@ -2,7 +2,8 @@
 
 (function () {
 // значения фильтров
-
+  var MAX_HASHTAGS = 5;
+  var MAX_LENGTH_HASHTAGS = 20;
   var DEFAULT_EFFECT = 20;
   var FILTERS = {
     'effect-none': {
@@ -134,12 +135,12 @@
   });
 
   // проверка поля с хэштегом
-  var validHashtags = function (evt) {
+  var checkHashtagsHandler = function (evt) {
     var arrHashtags = uploadHashtags.value.split(' ');
 
     var isContentValid = function () {
       for (var i = 0; i < arrHashtags.length; i++) {
-        if (arrHashtags[i].slice(0, 1) !== '#' || arrHashtags[i].length === 1 || arrHashtags[i].length > 20) {
+        if (arrHashtags[i].length > 0 && arrHashtags[i].slice(0, 1) !== '#' || arrHashtags[i].length === 1 || arrHashtags[i].length > MAX_LENGTH_HASHTAGS) {
           return false;
         }
       }
@@ -165,7 +166,7 @@
       return true;
     };
 
-    if (arrHashtags.length > 5) {
+    if (arrHashtags.length > MAX_HASHTAGS) {
       uploadHashtags.setCustomValidity('не более 5-ти хэштегов');
       uploadHashtags.classList.add('upload-message-error');
     } else if (arrHashtags.length > 0 && isContentValid() === false) {
@@ -184,7 +185,7 @@
   };
 
   // проверка поля с комментариями
-  var validDescriptionInput = function (evt) {
+  var checkDescriptionHandler = function (evt) {
     if (uploadDescription.validity.tooLong) {
       uploadDescription.setCustomValidity('не более 140 символов');
       uploadDescription.classList.add('upload-message-error');
@@ -194,11 +195,11 @@
     }
   };
   // общая проверка инпутов
-  var validInputs = function (evt) {
+  var validateInputs = function (evt) {
     if (evt.target === uploadHashtags) {
-      validHashtags();
+      checkHashtagsHandler();
     } else if (evt.target === uploadDescription) {
-      validDescriptionInput();
+      checkDescriptionHandler();
     }
   };
   // функция открытия формы кадрирования
@@ -209,7 +210,7 @@
     document.addEventListener('keydown', function (evt) {
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
-    uploadForm.addEventListener('input', validInputs);
+    uploadForm.addEventListener('input', validateInputs);
     uploadForm.addEventListener('submit', function (evt) {
       onSubmitClick(evt);
     });
@@ -225,7 +226,7 @@
     document.removeEventListener('keydown', function (evt) {
       window.util.isEscEvent(evt, closeUploadOverlay, uploadDescription);
     });
-    uploadForm.removeEventListener('input', validInputs);
+    uploadForm.removeEventListener('input', validateInputs);
     uploadForm.removeEventListener('submit', function (evt) {
       onSubmitClick(evt);
     });

@@ -58,17 +58,17 @@
 
   // обрабочтик клика по фильтру
   var onFilterClick = function (evt) {
-    switch (true) {
-      case evt.target.id === 'filter-recommend':
+    switch (evt.target.id) {
+      case 'filter-recommend':
         window.debounce(window.render(pictures), pictureClick);
         break;
-      case evt.target.id === 'filter-popular':
+      case 'filter-popular':
         window.debounce(sortByLikes);
         break;
-      case evt.target.id === 'filter-discussed':
+      case 'filter-discussed':
         window.debounce(sortByComments);
         break;
-      case evt.target.id === 'filter-random':
+      case 'filter-random':
         window.debounce(sortByShuffle);
         break;
     }
