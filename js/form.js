@@ -2,6 +2,7 @@
 
 (function () {
 // значения фильтров
+  var FILE_TYPES = ['jpg', 'jpeg', 'png'];
   var MAX_HASHTAGS = 5;
   var MAX_LENGTH_HASHTAGS = 20;
   var DEFAULT_EFFECT = 20;
@@ -237,7 +238,25 @@
   };
 
   // события закрытия и открытия формы кадрирования
-  uploadFileInput.addEventListener('change', openUploadOverlay);
+  uploadFileInput.addEventListener('change', function () {
+    var file = uploadFileInput.files[0];
+    var fileName = file.name.toLowerCase();
+
+    var matches = FILE_TYPES.some(function (it) {
+      return fileName.endsWith(it);
+    });
+
+    if (matches) {
+      var reader = new FileReader();
+
+      reader.addEventListener('load', function () {
+        effectPreview.src = reader.result;
+      });
+
+      reader.readAsDataURL(file);
+    }
+    openUploadOverlay();
+  });
 
   uploadCancel.addEventListener('click', closeUploadOverlay);
   uploadCancel.addEventListener('keydown', function (evt) {
