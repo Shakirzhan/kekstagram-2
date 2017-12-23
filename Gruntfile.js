@@ -17,6 +17,7 @@ module.exports = function(grunt) {
             "fonts/**/*.{woff,woff2}",
             "img/**",
             "js/**",
+            "css/**",
             "*.html"
           ],
           dest: "build"
@@ -176,12 +177,6 @@ module.exports = function(grunt) {
   ]),
   //сборка и публикация
   grunt.registerTask("build", [
-    "clean",
-    "copy",
-    "less",
-    "postcss",
-    "csso",
-    "img",
     "gh-pages",
   ])
 };
