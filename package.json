@@ -1,27 +1,34 @@
 {
-  "name": "kekstagram",
-  "version": "1.0.0",
+  "name": "sedona",
+  "version": "0.1.0",
   "private": true,
-  "description": "Личный проект «Кекстаграм» от HTML Academy",
-  "author": "Ivan Chernobuk",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:htmlacademy-javascript/237614-kekstagram.git"
-  },
-  "bugs": {
-    "url": "https://github.com/htmlacademy-javascript/237614-kekstagram/issues"
-  },
-  "homepage": "https://github.com/htmlacademy-javascript/237614-kekstagram",
-  "license": "MIT",
   "devDependencies": {
-    "eslint": "3.9.0",
-    "eslint-config-htmlacademy": "0.2.x"
+    "@htmlacademy/editorconfig-cli": "0.1.x",
+    "autoprefixer": "6.7.x",
+    "css-mqpacker": "^5.0.1",
+    "grunt": "1.0.1",
+    "grunt-browser-sync": "2.2.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-imagemin": "^1.0.1",
+    "grunt-contrib-less": "1.4.0",
+    "grunt-contrib-watch": "1.0.0",
+    "grunt-csso": "^2.2.0",
+    "grunt-gh-pages": "^2.0.0",
+    "grunt-postcss": "0.8.0",
+    "grunt-svgmin": "^4.0.0",
+    "grunt-svgstore": "^1.0.0",
+    "load-grunt-tasks": "^3.5.2"
   },
-  "dependencies": {},
   "scripts": {
-    "test": "eslint js/"
+    "test": "editorconfig-cli"
   },
-  "engines": {
-    "node": "^6.10"
-  }
+  "editorconfig-cli": [
+    "*.html",
+    "*.json",
+    "*.js",
+    "js/**/*.js",
+    "img/**/*.svg",
+    "less/**/*.less"
+  ]
 }
